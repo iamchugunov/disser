@@ -5,6 +5,7 @@ function [] = svfig( figureid, name )
     
     saveas(figureid, p1);
     saveas(figureid, p2);
+    #кек
 
 end
 
