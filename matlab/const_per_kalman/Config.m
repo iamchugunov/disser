@@ -8,6 +8,7 @@ function [ config ] = Config( )
     config.posts = [0 0 0; 10 0 0; 0 10 0; 10 10 0]';
     config.posts = [-5076.25700228714 12312.9342219411 -8241.14728795100 -1.11097161563963;-11487.2777145567 3509.94201846127 5345.24999149516 -0.445039107080202;160.134190817221 106.173298698501 188.845909395533 124.399999890768];
     config.posts = [-5e3 12e3 -8e3 0; -11e3 3.5e3 5e3 0; 10 10 10 10];
+    config.PostsENU = config.posts;
     config.posts_number = size(config.posts, 2);
     config.hei = 1*10e3;
     config.sigma_ksi = 100;

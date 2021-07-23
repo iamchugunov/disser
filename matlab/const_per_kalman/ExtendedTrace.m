@@ -12,9 +12,9 @@ classdef ExtendedTrace
         mode;                   % режим полета 1-V-const, 2-V-const/acc-const/V-const, 3-V-const/V_ug-const/V-const
         start_time_str;         % начальное время
         start_time_sec;         % начальное время, сек
-        T_period = 1;        % период излучения (минимальный), сек
+        T_period = 0.001;        % период излучения (минимальный), сек
         pause = 0;              % возможный интервал паузы начала излучения, сек
-        N_periods = 0;        % число периодов, которые могут быть пропущены
+        N_periods = 1000;        % число периодов, которые могут быть пропущены
         sigma_T = 0;           % ско девиации периодов, сек
         max_coord;              % пределы по рабочей зоне
         max_V;                  % пределы по скорости
@@ -33,6 +33,13 @@ classdef ExtendedTrace
         R_mode4;            % радиус полета по кругу
         w_mode4;        % угловая скорость полета по кругу
         angle_mode4;    % угол при полете по кругу
+        frame_length = 0.01; % длительность кадра при имитации poits
+        freq = 1090; % частота кГц
+        ID = -1; % id борта
+%         ID = randi([1 100000]);
+        
+        
+        
     end
     
     methods (Access = public)
@@ -258,6 +265,36 @@ classdef ExtendedTrace
             for i = 1:obj.posts_number
                 obj.ranges(i,1) = norm(obj.posts(:,i) - [obj.X(1); obj.X(4); obj.X(7)]);
                 obj.ToA(i,1) = obj.X(9) + obj.ranges(i,1)/obj.c + normrnd(0,obj.sigma_n);
+            end
+        end
+        
+        function poits = get_poits(obj)
+            Tframe = obj.start_time_sec;
+            if max(obj.Measurements(:,1)) - Tframe > obj.frame_length
+                 N = floor((max(obj.Measurements(:,1)) - Tframe)/obj.frame_length);
+                 Tframe = Tframe + N * obj.frame_length;  
+            end
+            poits(1).Frame = Tframe;
+            poits(1).ToA = (obj.Measurements(:,1) - Tframe)*1e9;
+            poits(1).coords = zeros(4,1);
+            poits(1).xy_valid = 0;
+            poits(1).valid_to_traj = 0;
+            poits(1).count = length(poits(1).ToA);
+            poits(1).freq = obj.freq;
+            poits(1).Smode = obj.ID;
+            for i = 2:length(obj.Measurements)
+                if max(obj.Measurements(:,i)) - Tframe > obj.frame_length
+                    N = floor((max(obj.Measurements(:,i)) - Tframe)/obj.frame_length);
+                    Tframe = Tframe + N * obj.frame_length;  
+                end
+                poits(i).Frame = Tframe;
+                poits(i).ToA = (obj.Measurements(:,i) - Tframe)*1e9;
+                poits(i).coords = zeros(4,1);
+                poits(i).xy_valid = 0;
+                poits(i).valid_to_traj = 0;
+                poits(i).count = length(poits(i).ToA);
+                poits(i).freq = obj.freq;
+                poits(i).Smode = obj.ID;
             end
         end
         
