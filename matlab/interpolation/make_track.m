@@ -35,7 +35,7 @@ function [track] = make_track(config)
         SV(:,i) = F * SV(:,i-1);
     end
     
-    poit = struct('Frame', 0,'ToA', zeros(size(config.posts,2),1),'coords', zeros(4,1),'xy_valid',0,'valid_to_traj',0,'dop',0,'count',0,'freq',0,'Smode',0);
+    poit = struct('Frame', 0,'ToA', zeros(size(config.posts,2),1),'coords', zeros(4,1),'xy_valid',0,'valid_to_traj',0,'dop',0,'count',0,'freq',0,'Smode',1);
     poits = repmat(poit,1,N);
     
     for i = 1:N
