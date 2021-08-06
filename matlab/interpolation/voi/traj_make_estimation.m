@@ -1,11 +1,15 @@
 function [traj] = traj_make_estimation(traj, config)
-    
-    [poits] = traj_get_poits(traj);
+    disp("============")
+    % берем из траектории точки соответствующие моменту накопления 
+    %(от current_t - T_nak до current_t
+    [poits] = traj_get_poits(traj); 
     
     k = length(poits);
     current_t0 = poits(1).Frame;
     current_tend = poits(end).Frame;
+    timestamp = current_t0;
     
+    % заполняем наблюдения y и вектор координат для аппроксимации
     y = zeros(4,k);
     cord = zeros(4,k);
     k1 = 0;
@@ -23,50 +27,111 @@ function [traj] = traj_make_estimation(traj, config)
         end
     end
     
-    if k1 < 5
-        a = 5;
-    end
-    
     cord = cord(:,1:k1);
     
-    X1 = traj_make_approx(cord, config);
+    % аппроксимируем, если координат больше или равно 3
     
-    if k > 200
-        nums1 = find([poits.count] > 2);
-        nums2 = find([poits.count] > 3);
-        if length(nums2 > 30)
-            y = y(:,nums2);
-        else
-            y = y(:,nums1);
+    [approx_flag, extrap_flag, X_appr, X_extr] = traj_make_initial(traj, cord, current_t0, config);
+    
+    if traj.mode == 0 && approx_flag == 0 && extrap_flag == 0
+        disp("WARNING :: Завязка не получилась")
+        return;
+    end
+      
+    if approx_flag
+        traj.approx_timestamp = timestamp;
+        traj.approx_count = traj.approx_count + 1;
+        traj.SV_approx(:,traj.approx_count) = X_appr;
+    end
+    
+    flag = 0;
+    if extrap_flag
+        disp("WARNING :: Пробуем по экстраполяции")
+        [flag, X, R] = traj_interpolation(traj, poits, y, config, X_extr);
+    end
+    if flag == 0
+        if approx_flag
+            disp("WARNING :: Пробуем по аппроксимации")
+            [flag, X, R] = traj_interpolation(traj, poits, y, config, X_appr);
         end
     end
-    
-    if k < 15
-       a = 5; 
-    end
         
-    [X, R] = traj_make_interp_3dv(y, config, X1);
     
-%     dt = poits(end).Frame - current_t0;
-%     
-%     F1 = [1 dt dt^2/2;
-%           0 1 dt;
-%           0 0 1];
-%     E = zeros(3);
-%     F = [F1 E E; E F1 E; E E F1];
-%     current_t0 = poits(end).Frame;
-%         
-%     X1 = F * X1;
-%     X = F * X;
+        
     
-    traj.e_count = traj.e_count + 1;
-    traj.t_last = current_tend;
+    if flag == 0
+        if traj.mode == 0
+            traj.T_nak = traj.T_nak + 10;
+            disp("WARNING :: Завязка не получилась: flag = 0")
+        else
+            traj.t_last = current_tend;
+            if k1 < 50
+                traj.T_nak = traj.T_nak + traj.T_nak_default;
+            else
+                traj.T_nak = traj.T_nak_default;
+            end
+            disp("WARNING :: Решение не получилось: flag = 0")
+        end
+                
+        interp_flag = 0;
+    else
+        if traj.mode == 0
+            traj.mode = 1;
+        end
+        traj.T_nak = traj.T_nak_default;
+        interp_flag = 1;
+        
+        traj.e_count = traj.e_count + 1;
+        traj.t_last = current_tend;
+        
+        traj.timestamps(traj.e_count) = timestamp;
+        traj.SV_interp(:,traj.e_count) = X;
+        traj.Dn(:,traj.e_count) = sqrt(diag(R));
+        
+        X2 = traj_extrapolation(X, current_tend - current_t0);
+        traj.timestamps1(traj.e_count) = current_tend;
+        traj.SV_interp1(:,traj.e_count) = X2; 
+        
+        traj.dops(traj.e_count) = mean([poits.dop]);
+    end
     
-    traj.timestamps(traj.e_count) = current_t0; 
-    traj.SV_approx(:,traj.e_count) = X1; 
-    traj.SV_interp(:,traj.e_count) = X; 
-    traj.current_SV_approx = X1; 
-    traj.current_SV_interp = X; 
+    
+    
+    
+    timestamp = current_tend;
+    if interp_flag
+        X = X2;
+        if isempty(traj.fil)
+            traj.fil = filter_new(X, timestamp);
+        else
+            if traj.fil.skipped > 3
+                traj.fil = filter_reset(traj.fil, X, timestamp);
+            else
+                traj.fil = filter_one_step(traj.fil, X, timestamp, diag(diag(R)));
+            end
+            
+        end
+    else
+%         if approx_flag && ~isempty(traj.fil)
+%             X1 = traj_extrapolation(X_appr, current_tend - current_t0);
+%             R = eye(6);
+%             R(1,1) = 10^2;
+%             R(3,3) = 10^2;
+%             R(5,5) = 10^2;
+%             R(2,2) = 0.5^2;
+%             R(4,4) = 0.5^2;
+%             R(6,6) = 0.5^2;
+%             if traj.fil.skipped > 3
+%                 traj.fil = filter_reset(traj.fil, X1, timestamp);
+%             else
+%                 traj.fil = filter_one_step(traj.fil, X1, timestamp, R);
+%             end
+%             
+%         end
+    end
+    
+   
+    
     
      
     

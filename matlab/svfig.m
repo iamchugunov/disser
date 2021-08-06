@@ -1,11 +1,10 @@
 function [] = svfig( figureid, name )
 
-    p1 = ['D:\github\disser\pisc\fig\' name '.fig'];
-    p2 = ['D:\github\disser\pisc\png\' name '.png'];
+    p1 = ['D:\Synology\Мои статьи\2021 - радиотехника\картинки\fig\' name '.fig'];
+    p2 = ['D:\Synology\Мои статьи\2021 - радиотехника\картинки\png\' name '.png'];
     
     saveas(figureid, p1);
     saveas(figureid, p2);
-    #кек
 
 end
 

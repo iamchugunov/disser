@@ -29,9 +29,7 @@ function [traj] = one_track_voi(poits, config)
         [ready_flag, traj] = traj_add_poit(traj, poits(i));
         if ready_flag
             traj = traj_make_estimation(traj, config);
-            if traj.mode == 0
-                traj.mode = 1;
-            end
+            
         end
         
         

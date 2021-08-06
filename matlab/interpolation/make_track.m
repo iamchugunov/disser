@@ -23,6 +23,11 @@ function [track] = make_track(config)
     SV(8,1) = 0;
     SV(9,1) = 0;
     
+    SV(1,1) = -50e3;
+    SV(4,1)  =-50e3;
+    SV(2,1) = 150;
+    SV(5,1) = 150;
+    
     for i = 2:N
         dt = ToT(i) - ToT(i-1);
         F1 = [1 dt dt^2/2;

@@ -6,8 +6,14 @@ function [poits1] = thinning_poits(poits)
         elseif rand_number > 0.4
            poits(i).ToA(randi([1 4])) = 0;
         else
-           poits(i).ToA(randi([1 4])) = 0;
-           poits(i).ToA(randi([1 4])) = 0;
+           N1 = randi([1 4]);
+           N2 = randi([1 4]);
+           while N1 == N2
+               N2 = randi([1 4]);
+           end
+           
+           poits(i).ToA([N1 N2]) = 0;
+           
         end
         poits(i).count = length(find(poits(i).ToA));
     end

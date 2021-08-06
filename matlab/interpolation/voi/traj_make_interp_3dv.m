@@ -1,5 +1,15 @@
-function [X, R] = traj_make_interp_3dv(y, config, X0)
+function [X, R, flag] = traj_make_interp_3dv(y, config, X0)
     addpath("D:\Projects\disser\matlab\interpolation\deriv_func\3da")   
+    N = size(y,2);
+    if N < 4
+        flag = 0;
+        X = [];
+        R = [];
+        return
+    end
+    if N > 200
+        y = y(:,end-200:end);
+    end
     N = size(y,2);
     t0 = 0;
     
@@ -101,7 +111,12 @@ function [X, R] = traj_make_interp_3dv(y, config, X0)
         X = X - inv(dp2d2X) * dpdX;
         k = k + 1;
         if norm(X - X_prev) < 0.5 || k > 10
-            [norm(X - X_prev) k N]
+            disp(num2str([norm(X - X_prev) norm(X(1:6) - X0([1 2 4 5 7 8])) k N]))
+            if norm(X - X_prev) < 10
+                flag = 1;
+            else
+                flag = 0;
+            end
             X_out = zeros(9,1);
             X_out([1 2 4 5 7 8]) = X(1:6);
             X = X_out;

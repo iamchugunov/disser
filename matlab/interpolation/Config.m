@@ -33,13 +33,13 @@ function [ config ] = Config( )
     config.V = 200;
     config.max_V = 600;
     config.max_acc = 10;
-    config.period_sec = 0.1; %sec
-    config.n_periods = 10; % count of skipped periods (non constant period mode)
+    config.period_sec = 0.005; %sec
+    config.n_periods = 100; % count of skipped periods (non constant period mode)
     config.lifetime = 600; %sec
     
     % measurements parameters
     config.frame_length_sec = 0.01;
-    config.sigma_n_ns = 10;
+    config.sigma_n_ns = 30;
     config.sigma_n_sec = config.sigma_n_ns /1e9;
     config.sigma_n_m = config.sigma_n_sec * config.c;
     
@@ -53,8 +53,8 @@ function [ config ] = Config( )
     
     config.zav_T_kill = 30;
     config.T_kill = 60;
-    config.T_nak = 10;
-    config.T_est = 10;
+    config.T_nak = 30;
+    config.T_est = 5;
 
 
 end
