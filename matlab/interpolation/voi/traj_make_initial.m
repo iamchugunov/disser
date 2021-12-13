@@ -28,7 +28,7 @@ function [approx_flag, extrap_flag, X_appr, X_extr] = traj_make_initial(traj, co
             X_extr = zeros(9,1);
         end
     end
-    extrap_flag = 0;
+%     extrap_flag = 0;
     
 end
 

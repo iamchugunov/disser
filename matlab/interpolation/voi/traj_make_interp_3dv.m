@@ -15,7 +15,19 @@ function [X, R, flag] = traj_make_interp_3dv(y, config, X0)
     
     X = zeros(6 + N,1);
     X(1:6) = X0([1 2 4 5 7 8]);
+    
+    for i = 1:size(y,2)
+        cord = X0([1 4 7]) + X0([2 5 8]) * max(y(:,i))*1e-9;
+        delta = [norm(config.posts(:,1) - cord);
+                    norm(config.posts(:,2) - cord);
+                    norm(config.posts(:,3) - cord);
+                    norm(config.posts(:,4) - cord);] / config.c_ns;
+        nums = find(y(:,i));
+        X(6+i) = mean(y(nums,i) - delta(nums));
+    end
     X(7:end) = max(y);
+    
+    
     
     k = 0;
     while 1

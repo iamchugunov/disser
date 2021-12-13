@@ -1,5 +1,5 @@
 function [track] = make_track(config)
-      
+
     current_t = 0;
     k = 0;
     while current_t < config.lifetime
@@ -7,7 +7,7 @@ function [track] = make_track(config)
         ToT(k) = current_t + config.period_sec * ( 1 + randi([0 config.n_periods]) );
         current_t = ToT(k);
     end
-    
+
     N = length(ToT);
     SV = zeros(9,N);
     
@@ -22,12 +22,12 @@ function [track] = make_track(config)
     SV(6,1) = 0;
     SV(8,1) = 0;
     SV(9,1) = 0;
-    
-%     SV(1,1) = -x/2;
-%     SV(4,1)  = 0;
-%     SV(2,1) = config.V;
-%     SV(5,1) = 0;
-    
+
+%     SV(1,1) = -50e3;
+%     SV(4,1)  =-50e3;
+%     SV(2,1) = 150;
+%     SV(5,1) = 150;
+
     for i = 2:N
         dt = ToT(i) - ToT(i-1);
         F1 = [1 dt dt^2/2;
@@ -39,10 +39,10 @@ function [track] = make_track(config)
              F0 F0 F1];
         SV(:,i) = F * SV(:,i-1);
     end
-    
+
     poit = struct('Frame', 0,'ToA', zeros(size(config.posts,2),1),'coords', zeros(4,1),'xy_valid',0,'valid_to_traj',0,'dop',0,'count',0,'freq',0,'Smode',1);
     poits = repmat(poit,1,N);
-    
+
     for i = 1:N
         poits(i).Frame = config.frame_length_sec * floor(ToT(i)/config.frame_length_sec);
         for j = 1:size(config.posts,2)
@@ -50,10 +50,9 @@ function [track] = make_track(config)
         end
         poits(i).count = 4;
     end
-        
+
     track.SV = SV;
     track.ToT = ToT;
     track.poits = poits;
-    
-end
 
+end
