@@ -1,11 +1,12 @@
-function [X, R] = max_likelyhood3dv(y, config, X0)
-    addpath("D:\Projects\disser\matlab\interpolation\deriv_func\3da")   
+function [X, R] = max_likelyhood3dv(y, config, X0, T0)
+    addpath("D:\github\disser\matlab\interpolation\deriv_func\3da")   
     N = size(y,2);
     t0 = 0;
     
     X = zeros(6 + N,1);
     X(1:6) = X0([1 2 4 5 7 8]);
     X(7:end) = max(y);
+    X(7:end) = T0;
     
     k = 0;
     while 1
@@ -100,8 +101,11 @@ function [X, R] = max_likelyhood3dv(y, config, X0)
         X_prev = X;
         X = X - inv(dp2d2X) * dpdX;
         k = k + 1;
-        if norm(X - X_prev) < 0.5 || k > 10
-            [norm(X - X_prev) k N]
+        nev(k) = norm(X(1:6)-X_prev(1:6));
+        if norm(X(1:6) - X_prev(1:6)) < 0.005 || k > 10
+            plot(nev)
+            hold on
+            [norm(X(1:6) - X_prev(1:6)) k N]
             X_out = zeros(9,1);
             X_out([1 2 4 5 7 8]) = X(1:6);
             X = X_out;

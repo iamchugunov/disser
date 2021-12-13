@@ -1,5 +1,7 @@
 function [poit] = poit_calc(poit, X0, config)
     hei = 0:1000:15000;
+    hei = 0:0.1:2;
+    hei = config.hei;
     if poit.count == 4
         [cord, flag, dop] = coord_solver_2D_h(poit.ToA*config.c_ns, config.posts, X0([1 2 4]), hei);
         if flag

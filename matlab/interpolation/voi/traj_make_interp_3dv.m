@@ -1,5 +1,5 @@
 function [X, R, flag] = traj_make_interp_3dv(y, config, X0)
-    addpath("D:\Projects\disser\matlab\interpolation\deriv_func\3da")   
+    addpath("D:\github\disser\matlab\interpolation\deriv_func\3da")   
     N = size(y,2);
     if N < 4
         flag = 0;

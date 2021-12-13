@@ -1,6 +1,6 @@
 function [ config ] = Config( )
-    addpath('D:\Projects\ПЕРЕСЧЕТ КООРДИНАТ');
-    addpath('D:\Projects\disser\matlab\interpolation\math')
+    addpath('D:\MATLAB\ПЕРЕСЧЕТ КООРДИНАТ');
+    addpath('D:\github\disser\matlab\interpolation\math')
     
     % common parameters
     config.c = 299792458;
