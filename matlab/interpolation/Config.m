@@ -1,6 +1,6 @@
 function [ config ] = Config( )
-    addpath('D:\MATLAB\ПЕРЕСЧЕТ КООРДИНАТ');
-    addpath('D:\github\disser\matlab\interpolation\math')
+    addpath('D:\Projects\ПЕРЕСЧЕТ КООРДИНАТ');
+%     addpath('D:\github\disser\matlab\interpolation\math')
     
     % common parameters
     config.c = 299792458;
@@ -17,6 +17,11 @@ function [ config ] = Config( )
 %     PostsBLH(:,2) = [40.221671; 44.518625; 1250.4];
 %     PostsBLH(:,3) = [40.376235; 44.255345; 2034.1];
 %     PostsBLH(:,4) = [40.204856; 44.376949; 1002.0];
+
+    PostsBLH(:,1) = [30.097498; 30.962812; 198.3];
+    PostsBLH(:,2) = [30.032239; 30.852883; 161.8];
+    PostsBLH(:,3) = [30.192029; 30.857960; 108.8];
+    PostsBLH(:,4) = [30.095264; 30.888045; 183.3];
 
     BLHref = mean(PostsBLH');
     BLHref(3) = 0;
