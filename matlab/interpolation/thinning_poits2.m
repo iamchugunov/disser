@@ -1,20 +1,12 @@
-function [poits1] = thinning_poits(poits)
+function [poits1] = thinning_poits2(poits)
     for i = 1:length(poits)
-        rand_number = rand;
-        if rand_number > 0.75
-            
-        elseif rand_number > 0.4
-           poits(i).ToA(randi([1 4])) = 0;
-        else
-           N1 = randi([1 4]);
-           N2 = randi([1 4]);
-           while N1 == N2
-               N2 = randi([1 4]);
-           end
-           
-           poits(i).ToA([N1 N2]) = 0;
-           
+        N1 = randi([1 4]);
+        N2 = randi([1 4]);
+        while N1 == N2
+            N2 = randi([1 4]);
         end
+        
+        poits(i).ToA([N1 N2]) = 0;
         poits(i).count = length(find(poits(i).ToA));
         
         poits(i).rd = zeros(6,1);
@@ -42,8 +34,10 @@ function [poits1] = thinning_poits(poits)
         if poits(i).ToA(2) ~= 0 && poits(i).ToA(1) ~= 0
             poits(i).rd(6,1) = poits(i).ToA(2) - poits(i).ToA(1);
         end
-    	poits(i).rd = poits(i).rd * 0.299792458000000;
+        poits(i).rd = poits(i).rd * 0.299792458000000;
     end
     poits1 = poits;
 end
+
+
 

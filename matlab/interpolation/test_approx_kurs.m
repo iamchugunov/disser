@@ -1,6 +1,6 @@
 %%
-
 addpath('D:\Projects\voi-matlab')
+addpath('D:\Projects\max-likehood')
 [ config ] = Config( );
 config.PostsENU = config.posts;
 %%
@@ -19,9 +19,10 @@ n1 = 1;
 n2 = 232;
 Xtrue = track.SV([1 2 4 5 7 8],n1:n2);
 poits = track.poits(n1:n2);
+% poits = track.poits;
 % poits = thinning_poits(poits);
 %%
-[X0, X, x, k, R] = process_poits(poits, config, Xtrue(:,1));
+[X0, X, x, k, R] = process_poits_kurs(poits, config, Xtrue(:,1));
 t = [poits.Frame] - poits(1).Frame;
 Xest = X;
 Xini = X0;
@@ -47,7 +48,7 @@ plot(config.PostsENU(1,:),config.PostsENU(2,:),'v')
 hold on
 plot(x(1,:),x(2,:),'.m')
 plot(Xtrue(1,:),Xtrue(3,:),'k.-')
-plot(Xest(1,:),Xest(3,:),'r.-')
+plot(Xest(1,:),Xest(3,:),'rx-')
 plot(Xini(1,:),Xini(3,:),'b.-')
 grid on
 daspect([1 1 1])
@@ -63,7 +64,7 @@ for i = 1:5:length(track.poits)-101
     n2 = i+100;
     poits = track.poits(n1:n2);
 %     poits = thinning_poits(poits);
-    [X0(:,k), X(:,k), x, K(k), R(:,k)] = process_poits(poits, config, track.SV([1 2 4 5 7 8],i));
+    [X0(:,k), X(:,k), x, K(k), R(:,k)] = process_poits_kurs(poits, config, track.SV([1 2 4 5 7 8],i));
     Xtrue(:,k) = track.SV([1 2 4 5 7 8],i);
 end
 
