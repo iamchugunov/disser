@@ -19,7 +19,10 @@ n1 = 1;
 n2 = 232;
 Xtrue = track.SV([1 2 4 5 7 8],n1:n2);
 poits = track.poits(n1:n2);
-% poits = thinning_poits(poits);
+% poits = thinning_poits2(poits);
+plot(config.PostsENU(1,:),config.PostsENU(2,:),'v')
+hold on
+plot(Xtrue(1,:),Xtrue(3,:),'k.-')
 %%
 [X0, X, x, k, R] = process_poits(poits, config, Xtrue(:,1));
 t = [poits.Frame] - poits(1).Frame;
@@ -51,6 +54,25 @@ plot(Xest(1,:),Xest(3,:),'r.-')
 plot(Xini(1,:),Xini(3,:),'b.-')
 grid on
 daspect([1 1 1])
+%%
+rd = [];
+for i = 1:length(poits)
+    r = [];
+    for j = 1:4
+        r(j,1) = norm(Xest([1 3 5],i) - config.posts(:,j));
+    end
+    
+    rd(:,i) = [r(4) - r(1);
+        r(4) - r(2);
+        r(4) - r(3);
+        r(3) - r(1);
+        r(3) - r(2);
+        r(2) - r(1);];
+end
+figure
+get_rd_from_poits(poits)
+hold on
+plot(t,rd'/1000)
 %%
 k = 0;
 X0 = [];

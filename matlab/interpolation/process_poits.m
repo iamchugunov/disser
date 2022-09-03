@@ -1,5 +1,5 @@
-function [X0, X, x, k, R] = process_poits(poits, config, X_0)  
-    addpath('D:\Projects\max-likehood')
+function [flag, X0, X, x, k, R] = process_poits(poits, config, X_0)  
+    addpath('D:\Projects\max-likehood\')
     k = 0;
     x = [];
     t = [];
@@ -23,8 +23,10 @@ function [X0, X, x, k, R] = process_poits(poits, config, X_0)
         X0(2,1) = koef1(2);
         X0(3,1) = koef2(1);
         X0(4,1) = koef2(2);
-        X0(5,1) = 10000;
-        X0(6,1) = 0;
+%         X0(5,1) = 10000;
+%         X0(6,1) = 0;
+        X0(5,1) = poits(1).true_coords(5);
+        X0(6,1) = poits(1).true_coords(6);
     else
         X0 = zeros(6,1);
         x = zeros(3,1);
@@ -35,12 +37,16 @@ function [X0, X, x, k, R] = process_poits(poits, config, X_0)
         t(i) = poits(i).Frame;
         y(:,i) = poits(i).rd;
     end
-    [X, R, nev, add] = max_likelyhood_2dv_rdm(y,t, config,X_0);
+%     X0(2) = 0;
+    [X, R, nev, add] = max_likelyhood_2dv_rdm(y,t, config,X0);
     R = sqrt(diag(inv(R)));
     range = norm(X([1 3]));
     V = norm(X([2 4]));
-    if range > 1e6 || V > 1000
-        disp('aaa')
+    if range > 1e6 || V > 10000
+        flag = 0;
+        disp(['aaa ' num2str(V)])
+    else
+        flag = 1;
     end
 end
 
