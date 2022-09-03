@@ -1,7 +1,7 @@
-function [track] = make_geo_track(X0, V, kurs, h, time_interval, config)
-    % X0 = [x0;y0] - m, initial point 2D
+function [track] = make_geo_track_circle(X0, V, R, h, time_interval, config)
+    % X0 = [x0;y0] - m, circle center
     % V m/s constant speed
-    % kurs - rad
+    % R - circle radius
     % h - geo heigth
     % time_interval sec [t0; tend];
     
@@ -9,14 +9,15 @@ function [track] = make_geo_track(X0, V, kurs, h, time_interval, config)
     
     t = time_interval(1):1:time_interval(end);
     
-    Vx = V * cos(kurs);
-    Vy = V * sin(kurs);
+    alpha_h = V/R;
     
-    X = [X0;0];
-    for i = 2:length(t)
-        X(1,i) = X(1,i-1) + Vx * (t(i) - t(i-1));
-        X(2,i) = X(2,i-1) + Vy * (t(i) - t(i-1));
+    alpha = 0;
+    for i = 1:length(t)
+        X(1,i) = X0(1) + R * cos(alpha);
+        X(2,i) = X0(2) + R * sin(alpha);
+        alpha = alpha + alpha_h;
     end
+    X(3,:) = 0;
     
     track1 = [];
     for i = 1:length(X)
@@ -40,4 +41,6 @@ function [track] = make_geo_track(X0, V, kurs, h, time_interval, config)
     
     
 end
+
+
 
