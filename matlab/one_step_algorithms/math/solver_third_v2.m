@@ -1,7 +1,4 @@
-function [x4] = solver_third_v2(toa, posts, config)
-
-
-    
+function [x4] = solver_third_v2(toa, posts, config) 
     
     z = 0;
     h = 10000;

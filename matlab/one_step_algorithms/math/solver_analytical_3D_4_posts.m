@@ -78,18 +78,18 @@ function [x] = solver_analytical_3D_4_posts(toa, posts)
     if D4 > 0
      	r_plus  = (-b + sqrt(D4)) / a;
      	r_minus = (-b - sqrt(D4)) / a;
-        if sign(r_plus*r_minus) < 0
-            if r_plus > 0
-                r_one = r_plus;
-            else
-                r_one = r_minus;
-            end
-            N = 1;
-            x(1,1) = alphaX + betaX*r_one;
-            x(2,1) = alphaY + betaY*r_one;
-            x(3,1) = alphaZ + betaZ*r_one;
-            x = x + ref_post;
-        else
+%         if sign(r_plus*r_minus) < 0
+%             if r_plus > 0
+%                 r_one = r_plus;
+%             else
+%                 r_one = r_minus;
+%             end
+%             N = 1;
+%             x(1,1) = alphaX + betaX*r_one;
+%             x(2,1) = alphaY + betaY*r_one;
+%             x(3,1) = alphaZ + betaZ*r_one;
+%             x = x + ref_post;
+%         else
             N = 2;
             x(1,1) = alphaX + betaX*r_plus;
             x(2,1) = alphaY + betaY*r_plus;
@@ -97,10 +97,10 @@ function [x] = solver_analytical_3D_4_posts(toa, posts)
             x(1,2) = alphaX + betaX*r_minus;
             x(2,2) = alphaY + betaY*r_minus;
             x(3,2) = alphaZ + betaZ*r_minus;
-        end
+%         end
         
         x = x + ref_post;
-    elseif D4 == 0
+    else if D4 == 0
         r_one = -b / a;
         N = 1;
         x(1,1) = alphaX + betaX*r_one;
