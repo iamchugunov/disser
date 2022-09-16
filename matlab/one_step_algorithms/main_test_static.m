@@ -3,7 +3,7 @@
 config.sigma_n_ns = 30;
 X = -400e3:50e3:400e3;
 Y = X;
-tracks = struct("t",[],"coords",[],"V",[],"poits",[]);
+tracks = struct("t",[],"coords",[],"V",[],"poits",[],'a',[]);
 k = 0;
 for i = 1:length(X)
     for j = 1:length(Y)

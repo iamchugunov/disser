@@ -1,4 +1,4 @@
-function [] = DOP_build(method, config)
+function [] = DOP_build(method, posts)
 %{
 max_x_y = 10;
 rad_dist = 3;
@@ -16,13 +16,10 @@ Sat_3 = [Sat_2(1)+(max_x_y/2)*cos(ang); Sat_2(2)-(max_x_y/2)*sin(ang)];
 SatPos = [Sat_1 Sat_2 Sat_3];
 %}
 
-SatPos = config.posts;
-SatPos(3,:) = [];
-SatPos(:,4) = [];
-
           
-X = -400e3:10e3:400e3;
-Y = -400e3:10e3:400e3;
+X = 0:0.1:10;
+Y = 0:0.1:10;
+SatPos = posts;
 
 % X = -30e3:1e3:30e3;
 % Y = -30e3:1e3:30e3;

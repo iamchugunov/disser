@@ -39,7 +39,7 @@ while 1
             DOPy = sqrt(abs(invHH(2,2)));
             DOPt = sqrt(abs(invHH(3,3)));
             dop = norm([DOPx DOPy]);
-            nev = norm(y - Y)
+            nev = norm(y - Y);
             if nev > 5000
                 flag = 0;
             else

@@ -1,7 +1,8 @@
 function [] = svfig( figureid, name )
-
-    p1 = ['D:\Synology\Мои статьи\2021 - радиотехника\картинки\fig\' name '.fig'];
-    p2 = ['D:\Synology\Мои статьи\2021 - радиотехника\картинки\png\' name '.png'];
+    
+    path = 'D:\Synology\Аспирантура\Диссертация\картинки для главы ГФ';
+    p1 = [path '\fig\' name '.fig'];
+    p2 = [path '\png\' name '.png'];
     
     saveas(figureid, p1);
     saveas(figureid, p2);
