@@ -1,7 +1,7 @@
 function [track] = make_measurements_for_track(track, config)
 %     period_sec = 0.04;
 %     n_periods = 20;
-    period_sec = 1;
+    period_sec = 0.4;
     n_periods = 0;
     
     t = track.t;
@@ -34,7 +34,7 @@ function [track] = make_measurements_for_track(track, config)
             Ranges(i,1) = norm(posts(:,i) - SV([1 3 5],k));
             ToA(i,1) = Ranges(i,1)/config.c + ToT(k);
         end
-        ToA = mod(ToA,0.01);
+%         ToA = mod(ToA,0.01);
         ToA = ToA * 1e9;
         ToA = ToA + normrnd(0, config.sigma_n_ns, [4, 1]);
         ToA = round(ToA);

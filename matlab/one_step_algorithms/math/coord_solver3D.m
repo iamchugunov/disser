@@ -1,7 +1,7 @@
 function [X, dop, nev, flag] = coord_solver3D(y, posts, X0, h)
 
     epsilon = 0.001;
-    max_iter = 7;
+    max_iter = 20;
     
     N = size(posts,2);
     Y = zeros(N, 1);
@@ -39,8 +39,9 @@ while 1
             DOPy = sqrt(abs(invHH(2,2)));
             DOPt = sqrt(abs(invHH(3,3)));
             dop = norm([DOPx DOPy]);
+%             fprintf("iter = %d, nev = %f,\t nev = %f\n", iter, nev, norm(y - Y));
             nev = norm(y - Y);
-            if nev > 5000
+            if nev > 500
                 flag = 0;
             else
                 flag = 1;

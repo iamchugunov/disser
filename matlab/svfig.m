@@ -1,6 +1,6 @@
 function [] = svfig( figureid, name )
     
-    path = 'D:\Synology\Аспирантура\Диссертация\картинки для главы ГФ';
+    path = 'D:\magicfolder\Аспирантура\Диссертация\картинки для главы ГФ';
     p1 = [path '\fig\' name '.fig'];
     p2 = [path '\png\' name '.png'];
     
