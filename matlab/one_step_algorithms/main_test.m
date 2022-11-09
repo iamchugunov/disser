@@ -103,7 +103,7 @@ t_s1 = [];
 k1 = 0;
 NEV = [];
 for i = 1:length(track.poits)
-    [x, dop, nev, flag] = coord_solver3D(track.poits(i).ToA * config.c_ns, config.posts, [1000;1000;-10000;max(track.poits(i).ToA) * config.c_ns]);
+    [x, dop, nev, flag] = coord_solver3D(track.poits(i).ToA * config.c_ns, config.posts, [1000;1000;10000;max(track.poits(i).ToA) * config.c_ns]);
     NEV(i) = nev;
     if flag
         k1 = k1 + 1;

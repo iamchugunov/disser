@@ -1,7 +1,7 @@
 function [X, dop, nev, flag] = coord_solver2D(y, posts, X0, h)
 
     epsilon = 0.001;
-    max_iter = 7;
+    max_iter = 20;
     
     N = size(posts,2);
     Y = zeros(N, 1);
