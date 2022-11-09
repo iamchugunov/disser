@@ -7,6 +7,7 @@ function [x] = solver_analytical_2D_3_posts_h(toa, posts, Z)
     d = toa - toa(MASTER);
     ref_post = posts(:,MASTER);
     posts = posts - ref_post;
+    Z = Z - ref_post(3,:);
     
     d(MASTER) = [];
     posts(:,MASTER) = [];
@@ -64,23 +65,23 @@ function [x] = solver_analytical_2D_3_posts_h(toa, posts, Z)
         x = [];
     end
     
-    x_out = [];
-    k = 0;
-    for j = 1:N
-        R = [];
-        for i = 1:length(toa)
-            R(i,1) = norm(posts_(:,i) - [x(:,j);0]);
-        end
-        rd_c = R - R(MASTER);
-        rd_m = (toa - toa(MASTER));
-        if norm(rd_c - rd_m) < 10
-            x_out = [x_out x(:,j)];
-            k = k + 1;
-        end
-    end
-    
-    x = x_out;
-    N = k;
+%     x_out = [];
+%     k = 0;
+%     for j = 1:N
+%         R = [];
+%         for i = 1:length(toa)
+%             R(i,1) = norm(posts_(:,i) - [x(:,j);0]);
+%         end
+%         rd_c = R - R(MASTER);
+%         rd_m = (toa - toa(MASTER));
+%         if norm(rd_c - rd_m) < 10
+%             x_out = [x_out x(:,j)];
+%             k = k + 1;
+%         end
+%     end
+%     
+%     x = x_out;
+%     N = k;
 
 end
 
